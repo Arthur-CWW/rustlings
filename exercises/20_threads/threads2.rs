@@ -4,6 +4,7 @@
 
 use std::{sync::Arc, thread, time::Duration};
 
+#[derive(Clone)]
 struct JobStatus {
     jobs_done: u32,
 }
@@ -14,21 +15,30 @@ fn main() {
 
     let mut handles = Vec::new();
     for _ in 0..10 {
-        let status_shared = Arc::clone(&status);
+        let mut status_shared = Arc::clone(&status);
         let handle = thread::spawn(move || {
             thread::sleep(Duration::from_millis(250));
 
             // TODO: You must take an action before you update a shared value.
-            status_shared.jobs_done += 1;
+            // Arc::make_mut().
+            // Arc::make_mut(status_shared);
+            // status_shared.jobs_done += 1;
+            // status_shared.().unwrap();
+            // let mut num = status_shared.lock().unwrap();
+            Arc::make_mut(&mut status_shared).jobs_done += 1;
+            // status_mut.jobs_done += 1;
         });
         handles.push(handle);
     }
 
     // Waiting for all jobs to complete.
+    // for handle in handles {
+
+    // }
+
+    // TODO: Print the value of `JobStatus.jobs_done`.
     for handle in handles {
         handle.join().unwrap();
     }
-
-    // TODO: Print the value of `JobStatus.jobs_done`.
-    println!("Jobs done: {}", todo!());
+    println!("Jobs done: {}", status.jobs_done);
 }
