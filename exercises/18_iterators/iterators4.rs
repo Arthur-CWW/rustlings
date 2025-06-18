@@ -10,6 +10,13 @@ fn factorial(num: u64) -> u64 {
     // - additional variables
     // For an extra challenge, don't use:
     // - recursion
+    let li = vec![num];
+
+    // li.iter()
+    //     .enumerate()
+    //     .map(|(i, _)| i)
+    //     .fold(1, |acc, x| acc * x)
+    (1..num + 1).fold(1, |acc, x| acc * x)
 }
 
 fn main() {
